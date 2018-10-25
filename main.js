@@ -104,7 +104,7 @@ function setMessage(msg){
   function defaultMsg() {
     message.textContent = "";
   }
-
+}
 // Step 6a - Create a new event called 'itsGreat'
 let itsGreat = new CustomEvent("itsGreat");
 
