@@ -106,10 +106,10 @@ function setMessage(msg){
   }
 
 // Step 6a - Create a new event called 'itsGreat'
-let event = new CustomEvent("itsGreat");
+let itsGreat = new CustomEvent("itsGreat");
 
 // Step 6b - Create a new event called 'selected'
-let event2 = new CustomEvent("selected");
+let selected = new CustomEvent("selected");
 
 // Step 6c - Add a new event listener to the message element that
 // listens for 'itsGreat', and set the callback to call setMessage with the 
@@ -127,20 +127,21 @@ let pickedColour = '#000';
 
 // Step 8 - Subscribe colourPreview to a click event listener. Use an anonymous function
 // as a the callback
-
+colourPreview.addEventListener('click', function(){
   // Step 8a - Using a condition statement, check if the #rgb content is currently
   // an empty string
-
+  if(rgb === ""){
     // Step 8b - If it is, change the value of pickedColour to '#000'
-
+    pickedColour = '#000';
 
     // Step 8c - Otherwise, change the value to the #rgb content
-
-
+  } else{
+    pickedColour = rbg;
+  }
 
   // Step 8d - Publish the 'selected' event
-
-
+  message.dispatchEvent(selected);
+});
 
 
 // Step 9 - Using a for/of loop, iterate through chosenColours
