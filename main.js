@@ -14,7 +14,7 @@ let message = document.querySelector('#message');
 
 // Step 1d - Select and store the .chosenColour node list
 // in a variable called chosenColours
-let chosenColours = document.querySelectorALL('#chosenColour');
+let chosenColours = document.querySelector('#chosenColour');
 
 
 // Step 2 - Create a function called sliderUpdate that takes an
@@ -77,45 +77,53 @@ function inputUpdate (event){
 // the 3 slider elements. Call the for each method and iterate through each element.
 // Using an arrow (or anonymous) function, subscribe the element to the oninput event,
 // providing the sliderUpdate function as the callback argument
+let sliders = [redSlider, greenSlider, blueSlider];
+sliders.forEach(function(ele){
+  ele.addEventListener('oninput', sliderUpdate);
+});
 
 
 // Step 4b - Without pushing to an array, create an array structure that contains
 // the 3 input elements. Call the for each method and iterate through each element.
 // Using an arrow (or anonymous) function, subscribe the element to the oninput event,
 // providing the inputUpdate function as the callback argument
-
+let inputs = [redInput, greenInput, blueInput];
+sliders.forEach(function(ele){
+  ele.addEventListener('oninput', inputUpdate);
+});
 
 
 // Step 5 - Create a function that has one parameter called msg
-
+function setMessage(msg){
   // Step 5a - Change the message text to equal the argument msg
-
+  message.textContent = msg;
 
   // Step 5b - Using a function that delays execution, change the
   // message content back to an empty string after 1500ms
-
-
-
+  setTimeout(defaultMsg, 1500);
+  function defaultMsg() {
+    message.textContent = "";
+  }
 
 // Step 6a - Create a new event called 'itsGreat'
-
+let event = new CustomEvent("itsGreat");
 
 // Step 6b - Create a new event called 'selected'
-
+let event2 = new CustomEvent("selected");
 
 // Step 6c - Add a new event listener to the message element that
 // listens for 'itsGreat', and set the callback to call setMessage with the 
 // argument "It's going to look great!"
-
+message.addEventListener("itsGreat", setMessage("It's going to look great!"));
 
 // Step 6d - Add a new event listener to the message element that
 // listens for 'selected', and set the callback to call setMessage with the 
 // argument "That's an awesome colour!"
-
+message.addEventListener("selected", setMessage("That's an awesome colour!"));
 
 
 // Step 7 - Create a variable called 'pickedColour' and set its value to '#000'
-
+let pickedColour = '#000';
 
 // Step 8 - Subscribe colourPreview to a click event listener. Use an anonymous function
 // as a the callback
