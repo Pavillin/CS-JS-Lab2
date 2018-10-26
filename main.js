@@ -14,7 +14,7 @@ let message = document.querySelector('#message');
 
 // Step 1d - Select and store the .chosenColour node list
 // in a variable called chosenColours
-let chosenColours = document.querySelector('#chosenColour');
+let chosenColours = document.querySelectorAll('.chosenColour');
 
 
 // Step 2 - Create a function called sliderUpdate that takes an
@@ -22,21 +22,20 @@ let chosenColours = document.querySelector('#chosenColour');
 function sliderUpdate (event){
   // Step 2a - Using destructuring, store the red, green, and blue slider values
   // into variables called r, g, and b
-  let r,g,b;
   [r,g,b] = [redSlider.value, greenSlider.value, blueSlider.value];
 
   // Step 2b - Create a variable called rgb and store the following format
   // using interpolation to parse the r, g, and b values:
   // rgb(r, g, b)
-  let rbg = `rbg(${r}, ${g}, ${b})`;
+  let rgb = `rgb(${r}, ${g}, ${b})`;
 
   // Step 2c - Access the style property of colourPreview and change
   // the background colour to our rgb variable value
-  colourPreview.style.backgroundColor = rbg;
+  colourPreview.style.backgroundColor = rgb;
 
   // Step 2d - Using colourPreview as the parent, select the #rgb element
   // and change the text content to equal our rgb variable value
-  colourPreview.querySelector('#rbg').textContent = rbg;
+  colourPreview.querySelector('#rgb').textContent = rgb;
 
   // Step 2e - Using the event argument, access the target, then the parentElement,
   // then select the child, input[type="number"], and then its value property.
@@ -50,26 +49,25 @@ function sliderUpdate (event){
 function inputUpdate (event){
   // Step 3a - Using destructuring, store the red, green, and blue input values
   // into variables called r, g, and b
-  let r,g,b;
   [r,g,b] = [redInput.value, greenInput.value, blueInput.value];
 
   // Step 3b - Create a variable called rgb and store the following format
   // using interpolation to parse the r, g, and b values:
   // rgb(r, g, b)
-  let rbg = `rbg(${r}, ${g}, ${b})`;
+  let rgb = `rgb(${r}, ${g}, ${b})`;
 
   // Step 3c - Access the style property of colourPreview and change
   // the background colour to our rgb variable value
-  colourPreview.style.backgroundColor = rbg;
+  colourPreview.style.backgroundColor = rgb;
 
   // Step 3d - Using colourPreview as the parent, select the #rgb element
   // and change the text content to equal our rgb variable value
-  colourPreview.querySelector('#rbg').textContent = rbg;
+  colourPreview.querySelector('#rgb').textContent = rgb;
 
   // Step 3e - Using the event argument, access the target, then the parentElement,
   // then select the child, input[type="range"], and then its value property.
   // Make it equal the event target's value
-  event.target.parentElement.querySelector('input[type="number"]').value = event.target.value;
+  event.target.parentElement.querySelector('input[type="range"]').value = event.target.value;
 }
 
 
@@ -77,21 +75,17 @@ function inputUpdate (event){
 // the 3 slider elements. Call the for each method and iterate through each element.
 // Using an arrow (or anonymous) function, subscribe the element to the oninput event,
 // providing the sliderUpdate function as the callback argument
-let sliders = [redSlider, greenSlider, blueSlider];
-sliders.forEach(function(ele){
-  ele.addEventListener('oninput', sliderUpdate);
+[redSlider, greenSlider, blueSlider].forEach(function(ele){
+  ele.addEventListener('input', sliderUpdate);
 });
-
 
 // Step 4b - Without pushing to an array, create an array structure that contains
 // the 3 input elements. Call the for each method and iterate through each element.
 // Using an arrow (or anonymous) function, subscribe the element to the oninput event,
 // providing the inputUpdate function as the callback argument
-let inputs = [redInput, greenInput, blueInput];
-sliders.forEach(function(ele){
-  ele.addEventListener('oninput', inputUpdate);
+[redInput, greenInput, blueInput].forEach(function(ele){
+  ele.addEventListener('input', inputUpdate);
 });
-
 
 // Step 5 - Create a function that has one parameter called msg
 function setMessage(msg){
@@ -100,27 +94,29 @@ function setMessage(msg){
 
   // Step 5b - Using a function that delays execution, change the
   // message content back to an empty string after 1500ms
-  setTimeout(defaultMsg, 1500);
-  function defaultMsg() {
+  setTimeout(function(){
     message.textContent = "";
-  }
+  }, 1500);
 }
 // Step 6a - Create a new event called 'itsGreat'
-let itsGreat = new CustomEvent("itsGreat");
+let itsGreatEvent = new Event("itsGreat");
 
 // Step 6b - Create a new event called 'selected'
-let selected = new CustomEvent("selected");
+let selectedEvent = new Event("selected");
 
 // Step 6c - Add a new event listener to the message element that
 // listens for 'itsGreat', and set the callback to call setMessage with the 
 // argument "It's going to look great!"
-message.addEventListener("itsGreat", setMessage("It's going to look great!"));
+message.addEventListener("itsGreat", function(){
+  setMessage("It's going to look great!");
+});
 
 // Step 6d - Add a new event listener to the message element that
 // listens for 'selected', and set the callback to call setMessage with the 
 // argument "That's an awesome colour!"
-message.addEventListener("selected", setMessage("That's an awesome colour!"));
-
+message.addEventListener('selected', function(){
+  setMessage("That's an awesome colour!");
+});
 
 // Step 7 - Create a variable called 'pickedColour' and set its value to '#000'
 let pickedColour = '#000';
@@ -130,30 +126,31 @@ let pickedColour = '#000';
 colourPreview.addEventListener('click', function(){
   // Step 8a - Using a condition statement, check if the #rgb content is currently
   // an empty string
-  if(rgb === ""){
+  if(colourPreview.querySelector("#rgb").textContent === ""){
     // Step 8b - If it is, change the value of pickedColour to '#000'
-    pickedColour = '#000';
+    colourPreview.querySelector("#rgb").textContent = pickedColour;
 
     // Step 8c - Otherwise, change the value to the #rgb content
   } else{
-    pickedColour = rbg;
+    pickedColour = colourPreview.querySelector("#rgb").textContent;
   }
-
   // Step 8d - Publish the 'selected' event
-  message.dispatchEvent(selected);
+  message.dispatchEvent(selectedEvent);
 });
 
 
 // Step 9 - Using a for/of loop, iterate through chosenColours
 // setting the initializer variable to chosenColour
-
+for(chosenColour of chosenColours){
   // Step 9a - Subscribe chosenColour to a click event, using
   // an anonymous function that takes an event as an argument
-
+  chosenColour.addEventListener('click', function(event){
     // Step 9b - Access the background colour of the event target
     // and make it equal to the pickedColour value
-
+    event.target.style.background = pickedColour;
 
     // Step 9c - Publish the 'itsGreat' event
-
+    message.dispatchEvent(itsGreatEvent);
+  });
+}
 
